@@ -10,7 +10,7 @@ As for now in the `archives` folder there is the same file, as can be downloaded
 ```
 
 ```nushell
-use /Users/user/git/nu_scripts_upstream/stdlib-candidate/std-rfc/bench.nu
+use tools/bench.nu
 bench -n 10 --pretty {
     polars open data/nz.csv
     | polars group-by year
