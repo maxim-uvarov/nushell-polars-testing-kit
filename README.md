@@ -25,7 +25,17 @@ Output:
 1sec 454ms ± 0.42%
 ```
 
-Let's save this file to parquet and measuer this process time
+Yet, [dply 0.3.2](https://github.com/vincev/dply-rs/commit/13f5bab1132d39569ee183b22b2e6e9a679235f9) is built on polars 0.40.0 too but shows no problems at all:
+
+```nushell
+> dply --version
+dply 0.3.2
+
+> bench --rounds 10 --pretty {dply -c 'csv("data/nz.csv") | group_by(year) | summarize(count = n(), sum = sum(geo_count)) | show()' | null}
+95ms 570µs ± 2.77%
+```
+
+Let's save this file to parquet and measure this process time
 
 ```nu
 > timeit {polars open data/nz.csv | polars to-parquet data/nz.parquet}
