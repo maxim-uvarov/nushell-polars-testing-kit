@@ -55,7 +55,7 @@ dply 0.3.2
 Let's save this file to parquet and measure this process time:
 
 ```nu
-> timeit {polars open data/nz.csv | polars to-parquet data/nz.parquet}
+> timeit {polars open --lazy data/nz.csv | polars to-parquet data/nz.parquet}
 1sec 677ms 431µs 83ns
 ```
 
@@ -77,13 +77,13 @@ Output:
 ```
 
 ```nu
-> timeit {polars open data/nz.parquet | polars to-jsonl data/nz.jsonl}
+> timeit {polars open data/nz.parquet --lazy | polars to-jsonl data/nz.jsonl}
 1sec 58ms 119µs
 ```
 
 ```nu
 bench -n 10 --pretty {
-    polars open data/nz.jsonl
+    polars open data/nz.jsonl --lazy
     | polars group-by year
     | polars agg (polars col geo_count | polars sum)
     | polars collect
