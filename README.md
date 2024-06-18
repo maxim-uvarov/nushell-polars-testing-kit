@@ -22,7 +22,24 @@ bench -n 10 --pretty {
 Output:
 
 ```
-97ms 350µs ± 2.7%
+109ms 100µs ± 24.25%
+```
+
+Let's try `polars open --lazy`
+
+```nushell
+bench -n 10 --pretty {
+    polars open data/nz.csv --lazy
+    | polars group-by year
+    | polars agg (polars col geo_count | polars sum)
+    | polars collect
+}
+```
+
+Output:
+
+```
+42ms 460µs ± 5.61%
 ```
 
 However, [dply 0.3.2](https://github.com/vincev/dply-rs/commit/13f5bab1132d39569ee183b22b2e6e9a679235f9) is built on polars 0.40.0 too but shows no problems at all:
@@ -32,14 +49,14 @@ However, [dply 0.3.2](https://github.com/vincev/dply-rs/commit/13f5bab1132d39569
 dply 0.3.2
 
 > bench --rounds 10 --pretty {dply -c 'csv("data/nz.csv") | group_by(year) | summarize(count = n(), sum = sum(geo_count)) | show()' | null}
-91ms 600µs ± 3.2%
+98ms 160µs ± 12.68%
 ```
 
 Let's save this file to parquet and measure this process time:
 
 ```nu
 > timeit {polars open data/nz.csv | polars to-parquet data/nz.parquet}
-309ms 14µs 416ns
+322ms 639µs
 ```
 
 Let's measure the parquet opening time:
@@ -56,12 +73,12 @@ bench -n 10 --pretty {
 Output:
 
 ```
-34ms 890µs ± 11.06%
+35ms 650µs ± 12.36%
 ```
 
 ```nu
 > timeit {polars open data/nz.parquet | polars to-jsonl data/nz.jsonl}
-659ms 313µs 42ns
+657ms 110µs 41ns
 ```
 
 ```nu
@@ -76,14 +93,14 @@ bench -n 10 --pretty {
 Output:
 
 ```
-3sec 649ms ± 0.24%
+3sec 645ms ± 0.32%
 ```
 
 while `dply` works with json quite fast.
 
 ```nu
 > bench --rounds 10 --pretty {dply -c 'json("data/nz.jsonl") | group_by(year) | summarize(count = n(), sum = sum(geo_count)) | show()' | null}
-323ms 500µs ± 1.87%
+323ms 600µs ± 2.43%
 ```
 
 ```nu
@@ -104,6 +121,6 @@ while `dply` works with json quite fast.
 │ build_rust_channel │ release                                         │
 │ allocator          │ mimalloc                                        │
 │ features           │ default, sqlite, system-clipboard, trash, which │
-│ installed_plugins  │ explore, image, polars, regex                   │
+│ installed_plugins  │ explore, polars, regex                          │
 ╰────────────────────┴─────────────────────────────────────────────────╯
 ```
