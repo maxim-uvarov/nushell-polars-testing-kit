@@ -79,6 +79,13 @@ Output:
 3sec 803ms ± 0.38%
 ```
 
+while `dply` works with json quite fast.
+
+```nu
+> bench --rounds 10 --pretty {dply -c 'json("data/nz.jsonl") | group_by(year) | summarize(count = n(), sum = sum(geo_count)) | show()' | null}
+329ms 900µs ± 2.89%
+```
+
 ```nu
 > version
 ╭────────────────────┬──────────────────────────────────────────╮
