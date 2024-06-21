@@ -22,7 +22,7 @@ bench -n 10 --pretty {
 Output:
 
 ```
-1sec 488ms ± 5.26%
+169ms 100µs ± 112.24%
 ```
 
 Let's try `polars open --lazy`
@@ -93,7 +93,7 @@ bench -n 10 --pretty {
 Output:
 
 ```
-3sec 871ms ± 0.4%
+284ms 500µs ± 2.6%
 ```
 
 while `dply` works with json quite fast.
@@ -111,16 +111,16 @@ while `dply` works with json quite fast.
 │ minor              │ 94                                       │
 │ patch              │ 3                                        │
 │ branch             │ main                                     │
-│ commit_hash        │ b1cf0e258dc103f28b23190e495a2695bb0f9c97 │
+│ commit_hash        │ 91d44f15c12005744c94bb883fe4092d6acea1d2 │
 │ build_os           │ macos-aarch64                            │
 │ build_target       │ aarch64-apple-darwin                     │
 │ rust_version       │ rustc 1.77.2 (25ef9e3d8 2024-04-09)      │
 │ rust_channel       │ 1.77.2-aarch64-apple-darwin              │
 │ cargo_version      │ cargo 1.77.2 (e52e36006 2024-03-26)      │
-│ build_time         │ 2024-06-15 06:03:25 +00:00               │
+│ build_time         │ 2024-06-21 12:35:27 +00:00               │
 │ build_rust_channel │ release                                  │
 │ allocator          │ mimalloc                                 │
 │ features           │ default, sqlite, system-clipboard, trash │
-│ installed_plugins  │ explore, polars, regex                   │
+│ installed_plugins  │ polars                                   │
 ╰────────────────────┴──────────────────────────────────────────╯
 ```
