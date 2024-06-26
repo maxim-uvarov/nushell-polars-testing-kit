@@ -22,7 +22,7 @@ bench -n 10 --pretty {
 Output:
 
 ```
-169ms 100µs ± 112.24%
+174ms 500µs ± 125.16%
 ```
 
 Let's try `polars open --lazy`
@@ -39,7 +39,7 @@ bench -n 10 --pretty {
 Output:
 
 ```
-42ms 760µs ± 8.26%
+44ms 250µs ± 10.28%
 ```
 
 However, [dply 0.3.2](https://github.com/vincev/dply-rs/commit/13f5bab1132d39569ee183b22b2e6e9a679235f9) is built on polars 0.40.0 too but shows no problems at all:
@@ -49,14 +49,14 @@ However, [dply 0.3.2](https://github.com/vincev/dply-rs/commit/13f5bab1132d39569
 dply 0.3.2
 
 > bench --rounds 10 --pretty {dply -c 'csv("data/nz.csv") | group_by(year) | summarize(count = n(), sum = sum(geo_count)) | show()' | null}
-95ms 420µs ± 11.86%
+95ms 500µs ± 12.22%
 ```
 
 Let's save this file to parquet and measure this process time:
 
 ```nu
 > timeit {polars open --lazy data/nz.csv | polars to-parquet data/nz.parquet}
-321ms 623µs 333ns
+297ms 665µs 916ns
 ```
 
 Let's measure the parquet opening time:
@@ -73,12 +73,12 @@ bench -n 10 --pretty {
 Output:
 
 ```
-40ms 540µs ± 4.87%
+31ms 230µs ± 7.54%
 ```
 
 ```nu
 > timeit {polars open data/nz.parquet --lazy | polars to-jsonl data/nz.jsonl}
-1sec 38ms 395µs 459ns
+668ms 748µs 917ns
 ```
 
 ```nu
@@ -93,34 +93,34 @@ bench -n 10 --pretty {
 Output:
 
 ```
-284ms 500µs ± 2.6%
+256ms 500µs ± 4.06%
 ```
 
 while `dply` works with json quite fast.
 
 ```nu
 > bench --rounds 10 --pretty {dply -c 'json("data/nz.jsonl") | group_by(year) | summarize(count = n(), sum = sum(geo_count)) | show()' | null}
-327ms 500µs ± 2.49%
+324ms 100µs ± 2.99%
 ```
 
 ```nu
 > version
 ╭────────────────────┬──────────────────────────────────────────╮
-│ version            │ 0.94.3                                   │
+│ version            │ 0.95.0                                   │
 │ major              │ 0                                        │
-│ minor              │ 94                                       │
-│ patch              │ 3                                        │
-│ branch             │ main                                     │
-│ commit_hash        │ 91d44f15c12005744c94bb883fe4092d6acea1d2 │
+│ minor              │ 95                                       │
+│ patch              │ 0                                        │
+│ branch             │                                          │
+│ commit_hash        │                                          │
 │ build_os           │ macos-aarch64                            │
 │ build_target       │ aarch64-apple-darwin                     │
-│ rust_version       │ rustc 1.77.2 (25ef9e3d8 2024-04-09)      │
-│ rust_channel       │ 1.77.2-aarch64-apple-darwin              │
-│ cargo_version      │ cargo 1.77.2 (e52e36006 2024-03-26)      │
-│ build_time         │ 2024-06-21 12:35:27 +00:00               │
+│ rust_version       │ rustc 1.78.0 (9b00956e5 2024-04-29)      │
+│ rust_channel       │ stable-aarch64-apple-darwin              │
+│ cargo_version      │ cargo 1.78.0 (54d8815d0 2024-03-26)      │
+│ build_time         │ 2024-06-26 04:37:27 +00:00               │
 │ build_rust_channel │ release                                  │
 │ allocator          │ mimalloc                                 │
 │ features           │ default, sqlite, system-clipboard, trash │
-│ installed_plugins  │ polars                                   │
+│ installed_plugins  │ explore, polars, regex                   │
 ╰────────────────────┴──────────────────────────────────────────╯
 ```
