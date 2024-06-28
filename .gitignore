@@ -1,2 +1,7 @@
 data
 md_backups
+*numd-temp-*
+load.nu
+load.py
+test_small.csv
+test_small_a.csv
