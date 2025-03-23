@@ -22,7 +22,7 @@ bench -n 10 --pretty {
 Output:
 
 ```
-137ms 900µs ± 27.43%
+# 0.95 => 137ms 900µs ± 27.43%
 ```
 
 Let's try `polars open`
@@ -39,7 +39,7 @@ bench -n 10 --pretty {
 Output:
 
 ```
-43ms 120µs ± 7.58%
+# 0.95 => 43ms 120µs ± 7.58%
 ```
 
 However, [dply 0.3.2](https://github.com/vincev/dply-rs/commit/13f5bab1132d39569ee183b22b2e6e9a679235f9) is built on polars 0.40.0 too but shows no problems at all:
@@ -49,14 +49,14 @@ However, [dply 0.3.2](https://github.com/vincev/dply-rs/commit/13f5bab1132d39569
 dply 0.3.2
 
 > bench --rounds 10 --pretty {dply -c 'csv("data/nz.csv") | group_by(year) | summarize(count = n(), sum = sum(geo_count)) | show()' | null}
-98ms 260µs ± 13.65%
+# 0.95 => 98ms 260µs ± 13.65%
 ```
 
 Let's save this file to parquet and measure this process time:
 
 ```nu
-336ms 731µs 542ns
 > timeit {polars open data/nz.csv | polars save data/nz.parquet}
+# 0.95 => 336ms 731µs 542ns
 ```
 
 Let's measure the parquet opening time:
@@ -73,12 +73,12 @@ bench -n 10 --pretty {
 Output:
 
 ```
-39ms 670µs ± 4.28%
+# 0.95 => 39ms 670µs ± 4.28%
 ```
 
 ```nu
-1sec 67ms 45µs 708ns
 > timeit {polars open data/nz.parquet | polars save data/nz.jsonl}
+# 0.95 => 1sec 67ms 45µs 708ns
 ```
 
 ```nu
@@ -93,14 +93,14 @@ bench -n 10 --pretty {
 Output:
 
 ```
-322ms 500µs ± 3.41%
+# 0.95 => 322ms 500µs ± 3.41%
 ```
 
 while `dply` works with json quite fast.
 
 ```nu
 > bench --rounds 10 --pretty {dply -c 'json("data/nz.jsonl") | group_by(year) | summarize(count = n(), sum = sum(geo_count)) | show()' | null}
-328ms 600µs ± 1.01%
+# 0.95 => 328ms 600µs ± 1.01%
 ```
 
 ```nu
