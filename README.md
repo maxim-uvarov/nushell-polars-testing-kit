@@ -12,7 +12,7 @@ As of now, in the `archives` folder, there is the same file that can be download
 ```nushell
 use tools/bench.nu
 bench -n 10 --pretty {
-    polars open data/nz.csv
+    polars open data/nz.csv --eager
     | polars group-by year
     | polars agg (polars col geo_count | polars sum)
     | polars collect
@@ -25,11 +25,11 @@ Output:
 137ms 900µs ± 27.43%
 ```
 
-Let's try `polars open --lazy`
+Let's try `polars open`
 
 ```nushell
 bench -n 10 --pretty {
-    polars open data/nz.csv --lazy
+    polars open data/nz.csv
     | polars group-by year
     | polars agg (polars col geo_count | polars sum)
     | polars collect
@@ -55,8 +55,8 @@ dply 0.3.2
 Let's save this file to parquet and measure this process time:
 
 ```nu
-> timeit {polars open --lazy data/nz.csv | polars to-parquet data/nz.parquet}
 336ms 731µs 542ns
+> timeit {polars open data/nz.csv | polars save data/nz.parquet}
 ```
 
 Let's measure the parquet opening time:
@@ -77,13 +77,13 @@ Output:
 ```
 
 ```nu
-> timeit {polars open data/nz.parquet --lazy | polars to-jsonl data/nz.jsonl}
 1sec 67ms 45µs 708ns
+> timeit {polars open data/nz.parquet | polars save data/nz.jsonl}
 ```
 
 ```nu
 bench -n 10 --pretty {
-    polars open data/nz.jsonl --lazy
+    polars open data/nz.jsonl
     | polars group-by year
     | polars agg (polars col geo_count | polars sum)
     | polars collect
