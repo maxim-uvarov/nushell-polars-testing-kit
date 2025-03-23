@@ -48,7 +48,7 @@ However, [dply 0.3.2](https://github.com/vincev/dply-rs/commit/13f5bab1132d39569
 > dply --version
 dply 0.3.2
 
-> bench --rounds 10 --pretty {dply -c 'csv("data/nz.csv") | group_by(year) | summarize(count = n(), sum = sum(geo_count)) | show()' | null}
+> bench --rounds 10 --pretty {dply -c 'csv("data/nz.csv") | group_by(year) | summarize(count = n(), sum = sum(geo_count)) | show()' | print -n ''}
 # 0.95 => 98ms 260µs ± 13.65%
 ```
 
@@ -99,7 +99,7 @@ Output:
 while `dply` works with json quite fast.
 
 ```nu
-> bench --rounds 10 --pretty {dply -c 'json("data/nz.jsonl") | group_by(year) | summarize(count = n(), sum = sum(geo_count)) | show()' | null}
+> bench --rounds 10 --pretty {dply -c 'json("data/nz.jsonl") | group_by(year) | summarize(count = n(), sum = sum(geo_count)) | show()' | print -n ''}
 # 0.95 => 328ms 600µs ± 1.01%
 ```
 
